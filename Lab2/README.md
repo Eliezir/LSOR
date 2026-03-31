@@ -79,3 +79,15 @@ Crie um documento descrevendo:
 - Capture pacotes DHCP nos clientes e servidores.
 - Analise no Wireshark os estagios DORA (Discover, Offer, Request, Ack).
 - Observe os campos `xid`, `yiaddr`, `chaddr`, `siaddr` e as camadas envolvidas.
+
+### Evidencia - Ping local
+
+Testes executados:
+- `pc0 -> 192.168.2.1` (gateway da Rede B)
+- `pc4 -> 192.168.1.1` (gateway da Rede A)
+- `pc2 -> 192.168.3.1` (gateway da Rede C)
+
+Resultado:
+- Todos os testes retornaram `4 received, 0% packet loss`, confirmando conectividade local entre hosts e gateways.
+
+![Teste de ping local](./tests/local-ping.png)
