@@ -42,6 +42,15 @@ Crie um documento descrevendo:
 
 > Redes D (10.0.0.4/30) e E (100.0.0.8/30) sao enlaces ponto a ponto entre roteadores e nao usam DHCP.
 
+### Plano de Rotas Estaticas
+| Dispositivo | Rede | Gateway |
+|---|---|---|
+| R1 | 192.168.2.0/24 | 10.0.0.5 |
+| R1 | 192.168.3.0/24 | 100.0.0.10 |
+| R2 | 192.168.1.0/24 | 10.0.0.6 |
+| R2 | 192.168.3.0/24 | 10.0.0.5 |
+| R3 | 192.168.1.0/24 | 100.0.0.9 |
+| R3 | 192.168.2.0/24 | 100.0.0.9 |
 ---
 
 ## Etapa 2 - Implementacao do Servico DHCP

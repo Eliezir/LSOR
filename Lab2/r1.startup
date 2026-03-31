@@ -1,3 +1,6 @@
 ifconfig eth0 192.168.1.1/24
 ifconfig eth1 100.0.0.9/30
 ifconfig eth2 10.0.0.5/30
+
+ip route add 192.168.2.0/24 via 10.0.0.6
+ip route add 192.168.3.0/24 via 100.0.0.10
