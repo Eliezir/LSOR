@@ -91,3 +91,34 @@ Resultado:
 - Analise no Wireshark os estagios DORA (Discover, Offer, Request, Ack).
 - Observe os campos `xid`, `yiaddr`, `chaddr`, `siaddr` e as camadas envolvidas.
 
+---
+
+## Checklist de Progresso
+
+### Etapa 1 - Planejamento e Modelagem
+- [x] Diagrama da topologia inserido
+- [x] Tabela de enderecamento
+- [x] Faixas DHCP por LAN
+- [x] Plano de rotas estaticas
+- [x] Plano de testes definido
+
+### Etapa 2 - Implementacao do DHCP
+- [x] Implementacao escolhida (`dnsmasq`)
+- [x] `dnsmasq` configurado em `R1`, `R2` e `R3`
+- [x] Arquivos externos em `shared/dnsmasq-r1.conf`, `shared/dnsmasq-r2.conf`, `shared/dnsmasq-r3.conf`
+- [x] Startups automatizados (IPs, rotas, DHCP)
+- [x] Captura DHCP automatica com `tcpdump` em clientes e servidores
+- [x] DHCP validado com DORA nas redes A, B e C
+
+### Etapa 3 - Internet (DNAT/SNAT)
+- [x] `R1` com `ip_forward=1`
+- [x] Regras NAT/MASQUERADE adicionadas no `R1` (interface WAN detectada em runtime)
+- [x] Rotas default adicionadas em `R2` e `R3` apontando para `R1`
+- [ ] Teste de conectividade para Internet (`ping 8.8.8.8`) a partir de um PC
+
+### Etapa 4 - Testes e Capturas
+- [x] Evidencia de `traceroute` entre sub-redes
+- [x] Capturas `.pcap` de DHCP geradas em `/shared/captures`
+- [ ] Abrir capturas no Wireshark e evidenciar estagios DORA
+- [ ] Documentar analise dos campos `xid`, `yiaddr`, `chaddr`, `siaddr`
+

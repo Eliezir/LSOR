@@ -1,6 +1,30 @@
+# Etapa 1 - Planejamento/enderecamento: IPs das interfaces do R1
 ifconfig eth0 192.168.1.1/24
 ifconfig eth1 100.0.0.9/30
 ifconfig eth2 10.0.0.5/30
 
+# Etapa 1 - Plano de rotas estaticas: alcance das LANs remotas via R2 e R3
 ip route add 192.168.2.0/24 via 10.0.0.6
 ip route add 192.168.3.0/24 via 100.0.0.10
+
+# Etapa 2 - Servico DHCP: instala (se necessario) e inicia o dnsmasq do R1 (LAN A)
+command -v dnsmasq >/dev/null 2>&1 || (apt-get update && apt-get install -y dnsmasq)
+dnsmasq -C /shared/dnsmasq-r1.conf
+
+# Etapa 2 - Captura DHCP: prepara pasta compartilhada e inicia captura DHCP do servidor
+mkdir -p /shared/captures
+command -v tcpdump >/dev/null 2>&1 || (apt-get update && apt-get install -y tcpdump)
+tcpdump -i eth0 -n -U -w /shared/captures/r1-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
+
+# Etapa 3 - Conectividade com Internet (NAT/SNAT): habilita roteamento no kernel
+echo 1 > /proc/sys/net/ipv4/ip_forward
+WAN_IF="eth3"
+ip link show "$WAN_IF" >/dev/null 2>&1 || WAN_IF="$(ip -o -4 route show default | awk '{print $5}' | head -n1)"
+
+# Etapa 3 - Conectividade com Internet (NAT/SNAT)
+
+# Habilita roteamento de pacotes
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Regra de NAT: masquerade tudo que sair pela eth3 (Internet/WAN no R1)
+iptables -t nat -A POSTROUTING -o eth3 -j MASQUERADE

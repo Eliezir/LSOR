@@ -3,3 +3,11 @@ ifconfig eth1 10.0.0.6/30
 
 ip route add 192.168.1.0/24 via 10.0.0.5
 ip route add 192.168.3.0/24 via 10.0.0.5
+ip route add default via 10.0.0.5
+
+command -v dnsmasq >/dev/null 2>&1 || (apt-get update && apt-get install -y dnsmasq)
+dnsmasq -C /shared/dnsmasq-r2.conf
+
+mkdir -p /shared/captures
+command -v tcpdump >/dev/null 2>&1 || (apt-get update && apt-get install -y tcpdump)
+tcpdump -i eth0 -n -U -w /shared/captures/r2-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
