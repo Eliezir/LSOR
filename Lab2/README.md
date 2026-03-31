@@ -1,38 +1,72 @@
 ## Topologia
 
-![Topologia do Lab (referência)](../Lab2/topologia.png)
+![Diagrama da topologia](../Lab2/topologia.png)
 
-## Etapa 1 — Planejamento e Modelagem
+---
+
+## Etapa 1 - Planejamento e Modelagem
 
 Crie um documento descrevendo:
 
-- Diagrama da topologia (pode usar a imagem fornecida).
-- Tabela de endereçamento (IPs, máscaras, gateways e funções).
-- Faixas DHCP para cada LAN (ex.: `192.168.10.100–192.168.10.200`).
-- Plano de rotas estáticas.
-- Plano de testes (pings, traceroutes, DHCP discover).
+1. Diagrama da topologia (imagem acima).
+2. Tabela de enderecamento (IPs, mascaras, gateways e funcoes).
+3. Faixas DHCP para cada LAN (ex.: `192.168.10.100-192.168.10.200`).
+4. Plano de rotas estaticas.
+5. Plano de testes (ping, traceroute, DHCP discover).
 
-## Etapa 2 — Implementação do Serviço DHCP
+### Tabela de Enderecamento
 
-- Pesquise e escolha uma implementação DHCP para Linux (ex.: `dnsmasq`, `isc-dhcp-server`, `udhcpd`, `kea` etc.).
-- Instale e configure nos roteadores (R1, R2, R3).
+| Dispositivo | Interface | Rede   | Endereco IP/CIDR | Mascara Decimal | Gateway Padrao | Funcao                            |
+|---|---|---|---|---|---|---|
+| R1  | eth0 | Rede A | 192.168.1.1/24   | 255.255.255.0   | -             | Gateway da LAN A                  |
+| R1  | eth1 | Rede E | 100.0.0.9/30     | 255.255.255.252 | -             | Enlace com R3 |
+| R1  | eth2 | Rede D | 10.0.0.5/30      | 255.255.255.252 | -             | Enlace com R2                     |
+| R2  | eth0 | Rede B | 192.168.2.1/24   | 255.255.255.0   | -             | Gateway da LAN B                  |
+| R2  | eth1 | Rede D | 10.0.0.6/30      | 255.255.255.252 | -             | Enlace com R1                     |
+| R3  | eth0 | Rede C | 192.168.3.1/24   | 255.255.255.0   | -             | Gateway da LAN C                  |
+| R3  | eth1 | Rede E | 100.0.0.10/30    | 255.255.255.252 | -             | Enlace com R1                     |
+| PC4 | eth0 | Rede A | DHCP             | 255.255.255.0   | 192.168.1.1   | Host da LAN A                     |
+| PC5 | eth0 | Rede A | DHCP             | 255.255.255.0   | 192.168.1.1   | Host da LAN A                     |
+| PC0 | eth0 | Rede B | DHCP             | 255.255.255.0   | 192.168.2.1   | Host da LAN B                     |
+| PC1 | eth0 | Rede B | DHCP             | 255.255.255.0   | 192.168.2.1   | Host da LAN B                     |
+| PC2 | eth0 | Rede C | DHCP             | 255.255.255.0   | 192.168.3.1   | Host da LAN C                     |
+| PC3 | eth0 | Rede C | DHCP             | 255.255.255.0   | 192.168.3.1   | Host da LAN C                     |
+
+### Faixas DHCP por LAN
+
+| LAN | Sub-rede | Gateway | Faixa DHCP sugerida |
+|---|---|---|---|
+| Rede A | 192.168.1.0/24 | 192.168.1.1 | 192.168.1.100-192.168.1.200 |
+| Rede B | 192.168.2.0/24 | 192.168.2.1 | 192.168.2.100-192.168.2.200 |
+| Rede C | 192.168.3.0/24 | 192.168.3.1 | 192.168.3.100-192.168.3.200 |
+
+> Redes D (10.0.0.4/30) e E (100.0.0.8/30) sao enlaces ponto a ponto entre roteadores e nao usam DHCP.
+
+---
+
+## Etapa 2 - Implementacao do Servico DHCP
+
+- Pesquise e escolha uma implementacao DHCP para Linux (ex.: `dnsmasq`, `isc-dhcp-server`, `udhcpd`, `kea`).
+- Instale e configure nos roteadores (`R1`, `R2`, `R3`).
 - Crie arquivos `.startup` para automatizar:
-  - Configuração de IPs e rotas;
-  - Inicialização dos serviços DHCP;
-  - Captura automática de pacotes DHCP com `tcpdump`.
-- Pesquise como o Kathará carrega arquivos de configuração externos (ex.: `dhcpd.conf`, `dnsmasq.conf`) e vincule-os aos nós.
+  - Configuracao de IPs e rotas;
+  - Inicializacao dos servicos DHCP;
+  - Captura automatica de pacotes DHCP com `tcpdump`.
+- Pesquise como o Kathara carrega arquivos de configuracao externos (ex.: `dhcpd.conf`, `dnsmasq.conf`) e vincule-os aos nos.
 
-## Etapa 3 — Conectividade com a Internet (DNAT e SNAT)
+---
+
+## Etapa 3 - Conectividade com a Internet (DNAT e SNAT)
 
 1. Pesquise como o R1 pode conectar-se à Internet e servir como **Gateway Padrão** para todos os demais nós da topologia.
 2. Faça um teste pingando o IP `8.8.8.8` de qualquer PC e verifique o retorno para a Internet.
 3. Dica: busque sobre masquerading, NAT estático e dinâmico no Linux. Há outra trilha no ALEX tratando sobre NAT — verifique lá.
 
-## Etapa 4 — Testes e Capturas
+## Etapa 4 - Testes e Capturas
 
 - Execute `kathara lstart` e verifique:
   - IPs obtidos via DHCP (`ip addr show`);
   - Conectividade entre sub-redes (`ping`/`traceroute`).
 - Capture pacotes DHCP nos clientes e servidores.
-- Analise no Wireshark os estágios DORA (Discover, Offer, Request, Ack).
+- Analise no Wireshark os estagios DORA (Discover, Offer, Request, Ack).
 - Observe os campos `xid`, `yiaddr`, `chaddr`, `siaddr` e as camadas envolvidas.
