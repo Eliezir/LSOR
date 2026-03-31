@@ -53,6 +53,17 @@ Crie um documento descrevendo:
 | R3 | 192.168.2.0/24 | 100.0.0.9 |
 ---
 
+### Evidencia - Traceroute entre LANs
+
+Testes executados:
+- `traceroute 192.168.3.10` (de `pc0` para `pc2`)
+- `traceroute 192.168.1.5` (de `pc0` para `pc4`)
+
+Resultado:
+- O caminho exibido confirma a passagem pelos roteadores esperados entre as sub-redes, validando o plano de rotas estaticas.
+
+![Teste de traceroute entre LANs](./tests/traceroute.png)
+
 ## Etapa 2 - Implementacao do Servico DHCP
 
 - Pesquise e escolha uma implementacao DHCP para Linux (ex.: `dnsmasq`, `isc-dhcp-server`, `udhcpd`, `kea`).
@@ -80,14 +91,3 @@ Crie um documento descrevendo:
 - Analise no Wireshark os estagios DORA (Discover, Offer, Request, Ack).
 - Observe os campos `xid`, `yiaddr`, `chaddr`, `siaddr` e as camadas envolvidas.
 
-### Evidencia - Ping local
-
-Testes executados:
-- `pc0 -> 192.168.2.1` (gateway da Rede B)
-- `pc4 -> 192.168.1.1` (gateway da Rede A)
-- `pc2 -> 192.168.3.1` (gateway da Rede C)
-
-Resultado:
-- Todos os testes retornaram `4 received, 0% packet loss`, confirmando conectividade local entre hosts e gateways.
-
-![Teste de ping local](./tests/local-ping.png)
