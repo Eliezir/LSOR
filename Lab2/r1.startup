@@ -8,7 +8,6 @@ ip route add 192.168.2.0/24 via 10.0.0.6
 ip route add 192.168.3.0/24 via 100.0.0.10
 
 # Etapa 2 - Servico DHCP: instala (se necessario) e inicia o dnsmasq do R1 (LAN A)
-command -v dnsmasq >/dev/null 2>&1 || (apt-get update && apt-get install -y dnsmasq)
 dnsmasq -C /shared/dnsmasq-r1.conf
 
 # Etapa 2 - Captura DHCP: prepara pasta compartilhada e inicia captura DHCP do servidor
