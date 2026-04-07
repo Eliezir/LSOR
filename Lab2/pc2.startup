@@ -1,5 +1,4 @@
 # ifconfig eth0 192.168.3.10/24
 # route add default gw 192.168.3.1
-command -v tcpdump >/dev/null 2>&1 || (apt-get update && apt-get install -y tcpdump)
 tcpdump -i eth0 -n -U -w /shared/captures/pc2-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
 dhclient eth0
