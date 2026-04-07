@@ -1,0 +1,13 @@
+# Kathará startup order (kathara-lab.dep): each device starts only after its dependencies.
+# r1 creates /shared/captures; r2/r3 start after r1 so enlaces e rotas existam.
+# PCs sobem depois do roteador da sua LAN para o DHCP (dnsmasq) já estar ativo.
+
+r2: r1
+r3: r1
+
+pc0: r2
+pc1: r2
+pc2: r3
+pc3: r3
+pc4: r1
+pc5: r1

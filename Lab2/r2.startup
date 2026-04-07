@@ -7,5 +7,4 @@ ip route add default via 10.0.0.5
 
 dnsmasq -C /shared/dnsmasq-r2.conf
 
-mkdir -p /shared/captures
 tcpdump -i eth0 -n -U -w /shared/captures/r2-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &

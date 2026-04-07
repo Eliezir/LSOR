@@ -1,4 +1,7 @@
 # Etapa 1 - Planejamento/enderecamento: IPs das interfaces do R1
+# Pasta de capturas compartilhada (único mkdir; ordem de boot em lab.dep)
+mkdir -p /shared/captures
+
 ifconfig eth0 192.168.1.1/24
 ifconfig eth1 100.0.0.9/30
 ifconfig eth2 10.0.0.5/30
@@ -10,8 +13,7 @@ ip route add 192.168.3.0/24 via 100.0.0.10
 # Etapa 2 - Servico DHCP: inicia o dnsmasq do R1 (LAN A)
 dnsmasq -C /shared/dnsmasq-r1.conf
 
-# Etapa 2 - Captura DHCP: prepara pasta compartilhada e inicia captura DHCP do servidor
-mkdir -p /shared/captures
+# Etapa 2 - Captura DHCP: captura DHCP do servidor
 tcpdump -i eth0 -n -U -w /shared/captures/r1-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
 
 # Etapa 3 - Conectividade com Internet (NAT/SNAT): habilita roteamento no kernel
