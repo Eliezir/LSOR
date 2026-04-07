@@ -12,7 +12,6 @@ dnsmasq -C /shared/dnsmasq-r1.conf
 
 # Etapa 2 - Captura DHCP: prepara pasta compartilhada e inicia captura DHCP do servidor
 mkdir -p /shared/captures
-command -v tcpdump >/dev/null 2>&1 || (apt-get update && apt-get install -y tcpdump)
 tcpdump -i eth0 -n -U -w /shared/captures/r1-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
 
 # Etapa 3 - Conectividade com Internet (NAT/SNAT): habilita roteamento no kernel

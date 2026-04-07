@@ -8,5 +8,4 @@ ip route add default via 100.0.0.9
 dnsmasq -C /shared/dnsmasq-r3.conf
 
 mkdir -p /shared/captures
-command -v tcpdump >/dev/null 2>&1 || (apt-get update && apt-get install -y tcpdump)
 tcpdump -i eth0 -n -U -w /shared/captures/r3-dhcp.pcap 'port 67 or port 68' >/dev/null 2>&1 &
